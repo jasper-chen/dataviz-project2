@@ -55,7 +55,41 @@ function graph (category, media) {
 	//create a graph
 	var height = 500;
 	var width = 800;
-	
+
+    var margin = 50;
+    var chartHeight = height - 2*margin;
+    var chartWidth = width - 2*margin;
+    var donutWidth = 80;
+    var radius = Math.min(chartWidth, chartHeight) / 2;
+
+	var color = ["red", "green", "blue", "violet"];
+	var dataset = getDataRows(category, media);
+
+	// var svg = d3.selectAll("svg");
+
+	var svg = d3.select("." + media)
+				.select("." + category)
+				.each(function(d) {console.log(d)
+				});
+
+	var arc = d3.svg.arc()
+			.innerRadius(radius - donutWidth)
+			.outerRadius(radius)
+			.startAngle(0)
+			.endAngle(function(d) {return Math.PI*dataset.value/180;
+			});
+	// var pie = d3.svg.pie()
+	// 		.value(function(d) { return d.value; })
+	// 		.sort(null);
+
+	svg.append("g")
+		.attr("d", arc)
+		.attr("transform", "translate(" + chartWidth/2 + "," + chartHeight + ")");
+				// .data(pie(dataset))
+				// .enter()
+				// .append('path')
+				// .attr('fill', function(d,i) { return color(s.color);
+				// })
 
 }
 /* From 

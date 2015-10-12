@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta charset="utf-8">
+    <title>Social Media Viz Demo</title>
+
+    <!-- load D3 library -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+  </head>
+  
+  <body>
+    <svg id="viz" height="500" width="800" style="border: 1px solid grey;">
+    </svg>
+    <script>
+      
+window.addEventListener("load",run);
+      
+
+ /* 1. For each social site and each demographic segment, a chart showing the percentage of online users using that social site split across all the groups in the segment. (Visualizations of the first type)
+
+ 2.For each demographic segment, a chart showing the percentage of online users using each of the social sites across all the groups in the segments. (Visualizations of the second type)*/
+
+function run () {
+	//create several graphs
+	
+	//grab the data
+	//var data = getDataRows(category);
+	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+	var categories = ['Age','Education'];
+	//make 25 graphs
+	//5 for each website, then 5 for each category
+
+	d3.select('body')
+		.data(social_sites)
+		.enter().append("div")
+	d3.select('body')
+		.selectAll("div")
+		.data(categories)
+		.enter().append(function(d) {
+			return d; 
+		});
+}
+
+function graph () {
+	//create a graph
+	var height = 500;
+	var width = 800;
+
+}
+
+/* From 
+   http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf
+*/
+
+    </script>
+    
+  </body>
+  
+</html>

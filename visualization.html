@@ -62,8 +62,8 @@ function graph (media,category) {
 
 	svg.attr("width", width)
 		.attr("height", height)
-		.style("black");
-
+		.append("g")
+		.style("fill","black");
 }
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf

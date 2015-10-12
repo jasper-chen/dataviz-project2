@@ -30,6 +30,9 @@ window.addEventListener("load",run);
  *
  */
 
+ /* 1. For each social site and each demographic segment, a chart showing the percentage of online users using that social site split across all the groups in the segment. (Visualizations of the first type)
+
+ 2.For each demographic segment, a chart showing the percentage of online users using each of the social sites across all the groups in the segments. (Visualizations of the second type)*/
 
 function run () {
 
@@ -37,6 +40,7 @@ function run () {
     var data2013 = getDataRows(category,2013);
     var data2014 = getDataRows(category,2014);
 
+    //calling css ID
     var svg = d3.select("#viz");
 
     // get the size of the SVG element
@@ -69,7 +73,7 @@ function run () {
 	    // create bar & value text
 	    // add some styles to make it pretty too
 
-            svg.append("rect")
+        svg.append("rect")
 		.attr("x",margin+(i*3+j)*barWidth)
 		.attr("y",yPos)
 		.attr("width",barWidth)

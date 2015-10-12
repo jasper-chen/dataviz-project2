@@ -224,7 +224,7 @@ function getDataRows (category,media) {
 	{ category:"Income", group:"<30k", media:"Twitter", value:21},
 	{ category:"Income", group:"30k-49k", media:"Twitter", value:19},
 	{ category:"Income", group:"50k-74k", media:"Twitter", value:25},
-	{ category:"Income", group:"75k+", media:"Twitter", value:26}
+	{ category:"Income", group:"75k+", media:"Twitter", value:26},
 
 	{ category:"Residence", group:"Urban", media:"Tumblr", value:16},
 	{ category:"Residence", group:"Suburban", media:"Tumblr", value:8},
@@ -244,7 +244,7 @@ function getDataRows (category,media) {
 	{ category:"Residence", group:"Urban", media:"Twitter", value:30},
 	{ category:"Residence", group:"Suburban", media:"Twitter", value:21},
 	{ category:"Residence", group:"Rural", media:"Twitter", value:15},
-	
+		];
     
     return data.filter(function(row) {
 	return (row.category===category && row.year===year) ; });

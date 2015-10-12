@@ -12,8 +12,6 @@
   </head>
   
   <body>
-    <svg id="viz" height="500" width="800" style="border: 1px solid grey;">
-    </svg>
     <script>
       
 window.addEventListener("load",run);
@@ -33,15 +31,15 @@ function run () {
 	//make 25 graphs
 	//5 for each website, then 6 for each category
 
-	d3.select('body')
+	d3.select("body")
 		.data(social_sites)
-		.enter().append("div")
-	d3.select('body')
-		.selectAll("div")
-		.data(categories)
-		.enter().append(function(d) {
-			return d; 
+		.enter().append("div").text(function(d){
+			return d;
 		});
+		
+	d3.select("div")
+		.data(categories)
+		.enter().append("svg");
 }
 
 function graph () {
@@ -163,7 +161,7 @@ function getDataRows (category,media) {
 	{ category:"Income", group:"<30k", media:"Twitter", value:21},
 	{ category:"Income", group:"30k-49k", media:"Twitter", value:19},
 	{ category:"Income", group:"50k-74k", media:"Twitter", value:25},
-	{ category:"Income", group:"75k+", media:"Twitter", value:26}
+	{ category:"Income", group:"75k+", media:"Twitter", value:26},
 
 	{ category:"Residence", group:"Urban", media:"Tumblr", value:16},
 	{ category:"Residence", group:"Suburban", media:"Tumblr", value:8},

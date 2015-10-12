@@ -31,24 +31,38 @@ function run () {
 	//make 25 graphs
 	//5 for each website, then 6 for each category
 
-	d3.select("body")
+	var diventer = d3.select("body")
 		.data(social_sites)
-		.enter().append("div").text(function(d){
+		.enter().append("div").attr("media", function(d){
+			return d;
+		}).text(function(d){ 
 			return d;
 		});
-		
-	d3.select("div")
-		.data(categories)
-		.enter().append("svg");
+
+	diventer.selectAll("div").data(categories)
+		.enter().append("svg").attr("category", function(d){
+			return d;
+		});
+
+	d3.selectAll("div").each(function(parent_d){
+		console.log(parent_d);
+	});
+
 }
 
-function graph () {
+function graph_helper (media) {
+	var current_media = media;
+
+
+}
+
+
+function graph (media,category) {
 	//create a graph
 	var height = 500;
 	var width = 800;
 
 }
-
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf
 */

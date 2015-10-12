@@ -45,22 +45,17 @@ function run () {
 		});
 
 	d3.selectAll("div").each(function(parent_d){
-		console.log(parent_d);
+		d3.select(this).selectAll("svg").each(function(d,i){
+			graph(parent,d);
+		});
 	});
-
 }
 
-function graph_helper (media) {
-	var current_media = media;
-
-
-}
-
-
-function graph (media,category) {
+function graph (category, media) {
 	//create a graph
 	var height = 500;
 	var width = 800;
+	
 
 }
 /* From 

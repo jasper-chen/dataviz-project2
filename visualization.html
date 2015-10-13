@@ -24,27 +24,29 @@ window.addEventListener("load",run);
 function run () {
 	//create several graphs
 	
-	//grab the data
-	//var data = getDataRows(category);
-	var social_sites = ['Test','Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
 	var categories = ['Total','Gender','Race','Income','Residence','Age','Education'];
 	//make 25 graphs
 	//5 for each website, then 6 for each category
 
-	var diventer = d3.select("body")
-		.data(social_sites)
-		.enter().append("div").attr("class", function(d){
+	var bodyenter = d3.select("body");
+	bodyenter.selectAll("div").data(social_sites)
+		.enter()
+		.append("div")
+		.attr("class", function(d){
 			return d;
-		}).text(function(d){ 
+		})
+		.text(function(d){ 
 			return d;
 		});
 
-	diventer.selectAll("div").data(categories)
+	var diventer = d3.select("body").selectAll("div");
+	diventer.selectAll("svg").data(categories)
 		.enter().append("svg").attr("class", function(d){
 			return d;
 		});
 
-	d3.selectAll("div").each(function(parent_d){
+	diventer.selectAll("div").each(function(parent_d){
 		d3.select(this).selectAll("svg").each(function(d){
 			graph(parent_d,d);
 		});
@@ -52,9 +54,13 @@ function run () {
 }
 
 function graph (media,category) {
+
+	var data = getDataRows(category,media);
 	//create a graph
 	var height = 500;
 	var width = 800;
+
+	var margin = 50;
 
 	var svg = d3.select("." + media).select("." + category).each(function(d){
 		console.log(d);
@@ -62,8 +68,7 @@ function graph (media,category) {
 
 	svg.attr("width", width)
 		.attr("height", height)
-		.append("g")
-		.style("fill","black");
+		.append("g");
 }
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf

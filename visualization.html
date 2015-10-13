@@ -59,10 +59,10 @@ function graph(media,category) {
 	var dataset = getDataRows(category,media);
 	// console.log(data);
 	//create a graph
-	var height = 500;
-	var width = 800;
+	var height = 200;
+	var width = 150;
 
-	var margin = 50;
+	var margin = 10;
 
 	var svg = d3.select("." + media).select("." + category);
 
@@ -74,6 +74,10 @@ function graph(media,category) {
     var margin = 50;
     var chartHeight = height - 2*margin;
     var chartWidth = width - 2*margin;
+    svg.attr("width", width)
+    	.attr("height", height);
+
+    
 
     // figure out the width of the bars so that all bars fit and 
     //   there is one bar width between them

@@ -46,16 +46,17 @@ function run () {
 			return d;
 		});
 
-	diventer.selectAll("div").each(function(parent_d){
+	d3.select("body").selectAll("div").each(function(parent_d){
 		d3.select(this).selectAll("svg").each(function(d){
 			graph(parent_d,d);
 		});
 	});
 }
 
-function graph (media,category) {
+function graph(media,category) {
 
 	var data = getDataRows(category,media);
+	console.log(data);
 	//create a graph
 	var height = 500;
 	var width = 800;
@@ -205,7 +206,7 @@ function getDataRows (category,media) {
 	
     
     return data.filter(function(row) {
-	return (row.category===category && row.year===year) ; });
+	return (row.category===category && row.media===media) ; });
 }
     </script>
     

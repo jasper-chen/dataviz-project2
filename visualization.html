@@ -62,8 +62,6 @@ function graph(media,category) {
 	var height = 200;
 	var width = 150;
 
-	var margin = 10;
-
 	var svg = d3.select("." + media).select("." + category);
 
 	// svg.attr("width", width)
@@ -71,7 +69,7 @@ function graph(media,category) {
 	// 	.append("g");
 
 	// the chart lives in the svg surrounded by a margin of 100px
-    var margin = 50;
+    var margin = 25;
     var chartHeight = height - 2*margin;
     var chartWidth = width - 2*margin;
     svg.attr("width", width)
@@ -95,6 +93,7 @@ function graph(media,category) {
 
     	var barHeight = chartHeight*d.value/100;
     	var yPos = height-margin-barHeight;
+    	var textmargin = 10;
 	 //    // compute the height of the bar as a proportion of the 
 	 //    // available chartHeight
 	 //    var barHeight = chartHeight*d.value/100;
@@ -113,16 +112,28 @@ function graph(media,category) {
 		.style("stroke-width","2px")
 		.style("fill",color[i]);
 
-	 //    svg.append("text")
-		// .attr("x",margin+(i*3)*barWidth+barWidth/2)
-		// .attr("y",yPos-20)
-		// .attr("dy","0.3em")
-		// .style("text-anchor","middle")
-		// .style("font-family","sans-serif")
-		// .style("font-weight","bold")
-		// .style("font-size","16px")
-		// .style("fill",color[i])
-		// .text(dataset.value+"%");
+	    svg.append("text")
+		.attr("x",margin+(i*3)*barWidth+barWidth/2)
+		.attr("y",yPos-20)
+		.attr("dy","0.3em")
+		.style("text-anchor","middle")
+		.style("font-family","sans-serif")
+		.style("font-weight","bold")
+		.style("font-size","12px")
+		.style("fill",color[i])
+		.text(d.value+"%");
+
+
+	    svg.append("text")
+		.attr("x",margin+(i*3)*barWidth+barWidth/2)
+		.attr("y",height-textmargin)
+		.attr("dy","0.3em")
+		.style("text-anchor","middle")
+		.style("font-family","sans-serif")
+		.style("font-weight","bold")
+		.style("font-size","9px")
+		.style("fill","black")
+		.text(d.group);
 	});
 
 }

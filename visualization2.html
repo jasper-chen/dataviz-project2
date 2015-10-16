@@ -16,9 +16,11 @@
     <script>
       
 window.addEventListener("load",run);
-      
+
  /* 1. For each social site and each demographic segment, a chart showing the percentage of online users using that social site split across all the groups in the segment. (Visualizations of the first type)
+
  2.For each demographic segment, a chart showing the percentage of online users using each of the social sites across all the groups in the segments. (Visualizations of the second type)*/
+
 function run () {
 	//create several graphs
 	
@@ -26,6 +28,7 @@ function run () {
 	var categories = ['Total','Gender','Race','Income','Residence','Age','Education'];
 	//make 25 graphs
 	//5 for each website, then 6 for each category
+
 	var bodyenter = d3.select("body");
 	bodyenter.selectAll("div").data(social_sites)
 		.enter()
@@ -41,11 +44,13 @@ function run () {
 		.enter().append("svg").attr("class", function(d){
 			return d;
 		});
+
 	d3.select("body").selectAll("div").each(function(parent_d){
 		d3.select(this).selectAll("svg").each(function(d){
 			graph(parent_d,d);
 		});
 	});
+
     var part_2 = d3.select("body");
     part_2.append("div")
     	.attr("class", "categories");
@@ -54,10 +59,18 @@ function run () {
     	.data(categories)
     	.enter()
     	.append("svg")
-    	.attr("class", function(d) {
-    		return d;
-    	})
-}
+    	.attr("class", function(d){return d;
+    	});
+
+    d3.select("body")
+    	.selectAll("div.categories")
+    	.selectAll("svg")
+  		.each(function(d){
+			graph2(d);
+		});
+};
+
+
 
 function graph(media,category) {
 	var dataset = getDataRows(category,media);
@@ -66,9 +79,11 @@ function graph(media,category) {
 	var height = 200;
 	var width = 150;
 	var svg = d3.select("." + media).select("." + category);
+
 	// svg.attr("width", width)
 	// 	.attr("height", height)
 	// 	.append("g");
+
 	// the chart lives in the svg surrounded by a margin of 100px
     var margin = 25;
     var chartHeight = height - 2*margin;
@@ -103,8 +118,7 @@ function graph(media,category) {
 
 //	 var xAxis = d3.svg.ordinal()
 //	 	.domain([])
-	    
-
+	   
 	    svg.append("rect")
 		.attr("x",margin+(i*3)*barWidth)
 		.attr("y",yPos)
@@ -122,32 +136,95 @@ function graph(media,category) {
 		.style("font-family","sans-serif")
 		.style("font-weight","bold")
 		.style("font-size","12px")
-		.style("fill","steelblue")
+		.style("fill",color[i])
 		.text(d.value+"%");
 
-		//.style("fill",color[i])
-		
+
 	    svg.append("text")
-	    .attr("transform", "rotate(-45)")
-		//.attr("x",margin+(i*3)*barWidth+barWidth/2)
-		//.attr("y",height-textmargin)
-		.attr("x",margin+(i*3)*barWidth+barWidth/2-130)
-		.attr("y",height-textmargin+i*24-20)
+		.attr("x",margin+(i*3)*barWidth+barWidth/2)
+		.attr("y",height-textmargin)
 		.attr("dy","0.3em")
 		.style("text-anchor","middle")
 		.style("font-family","sans-serif")
 		.style("font-weight","bold")
 		.style("font-size","9px")
 		.style("fill","black")
-		
 		.text(d.group);
-		
-		//svg.append("g").
 	});
+
 }
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf
 */
+
+function graph2(category){
+	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+
+	var height = 200;
+	var width = 150;
+
+	var svg = d3.select("body").select("div.categories").select("." + category);
+
+	svg.attr("width", width)
+		.attr("height", height);
+
+	// the chart lives in the svg surrounded by a margin of 25px
+    var margin = 25;
+    var chartHeight = height - 2*margin;
+    var chartWidth = width - 2*margin;
+    var textmargin = 10;
+    var bucketWidth = chartWidth/6;
+
+    // var color = ["red", "green", "blue", "violet"];
+
+
+	social_sites.forEach(function(d,i){
+		var dataset = getDataRows(category,d);
+		var bucketWidth = chartWidth/6;
+		var x_start = i*bucketWidth+margin;
+		var barWidth = bucketWidth/(dataset.length);
+
+		dataset.forEach(function(g,j){
+			var barHeight = chartHeight*g.value/100;
+			var yPos = height-margin-barHeight;
+
+			svg.append("rect")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",yPos)
+			.attr("width",barWidth)
+			.attr("height",barHeight)
+			.style("stroke","white")
+			.style("stroke-width","2px")
+			.style("fill","blue");
+
+			svg.append("text")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",yPos-20)
+			.attr("dy","0.3em")
+			.style("text-anchor","middle")
+			.style("font-family","sans-serif")
+			.style("font-weight","bold")
+			.style("font-size","12px")
+			.style("fill","blue")
+			.text(g.value+"%");
+
+			svg.append("text")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",height-textmargin)
+			.attr("dy","0.3em")
+			.style("text-anchor","middle")
+			.style("font-family","sans-serif")
+			.style("font-weight","bold")
+			.style("font-size","9px")
+			.style("fill","black")
+			.text(g.media);
+
+		})
+	// return data;
+
+	})
+};
+
 function getDataRows (category,media) {
     var data = [
 	{ category:"Total", group:"all", media:"Tumblr", value:10},
@@ -165,7 +242,7 @@ function getDataRows (category,media) {
 	{ category:"Gender", group:"Men", media:"Instagram", value:24},
 	{ category:"Gender", group:"Women", media:"Instagram", value:31},
 	{ category:"Gender", group:"Men", media:"LinkedIn", value:26},
-	{ category:"Gender", group:"Women", media:"LinkedIn", value:25},
+	{ category:"Gender", group:"Weomen", media:"LinkedIn", value:25},
 	{ category:"Gender", group:"Men", media:"Twitter", value:25},
 	{ category:"Gender", group:"Women", media:"Twitter", value:21},
 	{ category:"Race", group:"White, Non-Hispanic", media:"Tumblr", value:9},
@@ -278,5 +355,5 @@ function getDataRows (category,media) {
     </script>
     
   </body>
-  
+
 </html>

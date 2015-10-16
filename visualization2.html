@@ -56,11 +56,22 @@ function run () {
     part_2.append("div")
     	.attr("class", "categories");
 
-    part_2.select("div.categories").data(categories)
+    part_2.select("div.categories").selectAll("svg")
+    	.data(categories)
     	.enter()
-    	.append("svg");
+    	.append("svg")
+    	.attr("class", function(d){return d;
+    	});
 
-}
+    d3.select("body")
+    	.selectAll("div.categories")
+    	.selectAll("svg")
+  		.each(function(d){
+			graph2(d);
+		});
+};
+
+
 
 function graph(media,category) {
 
@@ -98,7 +109,7 @@ function graph(media,category) {
 
 
     dataset.forEach(function(d,i) {
-    	console.log(dataset + i);
+    	// console.log(dataset + i);
 
     	var barHeight = chartHeight*d.value/100;
     	var yPos = height-margin-barHeight;
@@ -149,6 +160,74 @@ function graph(media,category) {
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf
 */
+
+function graph2(category){
+	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+
+	var height = 200;
+	var width = 150;
+
+	var svg = d3.select("body").select("div.categories").select("." + category);
+
+	svg.attr("width", width)
+		.attr("height", height);
+
+	// the chart lives in the svg surrounded by a margin of 25px
+    var margin = 25;
+    var chartHeight = height - 2*margin;
+    var chartWidth = width - 2*margin;
+    var textmargin = 10;
+    var bucketWidth = chartWidth/6;
+
+    // var color = ["red", "green", "blue", "violet"];
+
+
+	social_sites.forEach(function(d,i){
+		var dataset = getDataRows(category,d);
+		var bucketWidth = chartWidth/6;
+		var x_start = i*bucketWidth+margin;
+		var barWidth = bucketWidth/(dataset.length);
+
+		dataset.forEach(function(g,j){
+			var barHeight = chartHeight*g.value/100;
+			var yPos = height-margin-barHeight;
+
+			svg.append("rect")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",yPos)
+			.attr("width",barWidth)
+			.attr("height",barHeight)
+			.style("stroke","white")
+			.style("stroke-width","2px")
+			.style("fill","blue");
+
+			svg.append("text")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",yPos-20)
+			.attr("dy","0.3em")
+			.style("text-anchor","middle")
+			.style("font-family","sans-serif")
+			.style("font-weight","bold")
+			.style("font-size","12px")
+			.style("fill","blue")
+			.text(g.value+"%");
+
+			svg.append("text")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",height-textmargin)
+			.attr("dy","0.3em")
+			.style("text-anchor","middle")
+			.style("font-family","sans-serif")
+			.style("font-weight","bold")
+			.style("font-size","9px")
+			.style("fill","black")
+			.text(g.media);
+
+		})
+	// return data;
+
+	})
+};
 
 function getDataRows (category,media) {
     var data = [

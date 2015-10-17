@@ -108,7 +108,7 @@ function graph(media,category) {
 
     var y = d3.scale.linear()
     	.domain([0,100])
-		.range([height,0]);
+		.range([height-margin,0]);
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
@@ -126,7 +126,7 @@ function graph(media,category) {
 		.attr("x",x(d.group)+x.rangeBand()-12)
 		.attr("y",y(d.value))
 		.attr("width",barWidth)
-		.attr("height", height - y(d.value))
+		.attr("height", height - y(d.value)-margin)
 		.style("stroke","white")
 		.style("stroke-width","2px")
 		.style("fill","steelblue");
@@ -134,7 +134,7 @@ function graph(media,category) {
 	    svg.append("text")
 		.attr("x",x(d.group)+x.rangeBand()-12)
 		.attr("y",y(d.value))
-		.attr("height",height - y(d.value))
+		.attr("height",height - y(d.value)-margin)
 		.attr("dy","1.3em")
 		.attr("dx","0.6em")
 		.style("font-family","sans-serif")
@@ -145,7 +145,7 @@ function graph(media,category) {
 
 		svg.append("g")
 			.attr("class", "x axis")
-       		.attr("transform", "translate(15," + height + ")")
+       		.attr("transform", "translate(15," + (height - margin) + ")")
         	.call(xAxis)
         	.selectAll("text")
         		.style("text-anchor", "end")

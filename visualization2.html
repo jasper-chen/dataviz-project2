@@ -36,7 +36,7 @@ function run () {
 		.attr("class", function(d){
 			return d;
 		})
-		.text(function(d){ 
+		.append("h2").text(function(d){ 
 			return d;
 		});
 
@@ -66,106 +66,127 @@ function run () {
     d3.select("body")
     	.selectAll("div.categories")
     	.selectAll("svg")
-  		.each(function(d){
-			graph2(d);
-		});
+    	.append("h2")
+    	.text(function(d){
+    		findsubcat(d);
+    	});
+  // 		.each(function(d){
+  // 			return d;
+  // 			// findsubcat(d);
+		// 	// graph2(d);
+		// });
+
 };
 
 
 
 function graph(media,category) {
-
-
 	var dataset = getDataRows(category,media);
-	// console.log(data);
 	//create a graph
+
+	var length = dataset.length;
 	var height = 200;
-	var width = 150;
+	var width = dataset.length*30;
+	var margin = 25;
 
-	var svg = d3.select("." + media).select("." + category);
-
-	// svg.attr("width", width)
-	// 	.attr("height", height)
+	var svg = d3.select("." + media).select("." + category)
+		.attr("width", width)
+		.attr("height", height);
 	// 	.append("g");
 
-	// the chart lives in the svg surrounded by a margin of 100px
-    var margin = 25;
-    var chartHeight = height - 2*margin;
-    var chartWidth = width - 2*margin;
-    svg.attr("width", width)
-    	.attr("height", height);
-
-    
-
-    // figure out the width of the bars so that all bars fit and 
-    //   there is one bar width between them
-    // note that every data point now has _2_ bars associated with 
-    //   it
-    var barWidth = chartWidth/(3*dataset.length-1);
-    // figure out where the vetical bar starts
-
-    var color = ["red", "green", "blue", "violet"];
-
-
+    var barWidth = 25;
+    groups = dataset.map(function(x){ return x.group });
+    var x = d3.scale.ordinal()
+		.domain(groups)
+		.rangeBands([0,width]);
+    var y = d3.scale.linear()
+    	.domain([0,100])
+		.range([height-margin,0]);
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left");
 
     dataset.forEach(function(d,i) {
     	// console.log(dataset + i);
-
-    	var barHeight = chartHeight*d.value/100;
-    	var yPos = height-margin-barHeight;
-    	var textmargin = 10;
-	 //    // compute the height of the bar as a proportion of the 
-	 //    // available chartHeight
-	 //    var barHeight = chartHeight*d.value/100;
-	 //    // figure out where the vetical bar starts
-	 //    var yPos = height-margin-barHeight;
-	 //    var color = ["red", "green", "blue", "violet"];
-	 //    // create bar & value text
-	 //    // add some styles to make it pretty too
-
+var textmargin = 10;
 	    svg.append("rect")
-		.attr("x",margin+(i*3)*barWidth)
-		.attr("y",yPos)
+		.attr("x",x(d.group)+x.rangeBand()-12)
+		.attr("y",y(d.value))
 		.attr("width",barWidth)
-		.attr("height",barHeight)
+		.attr("height", height - y(d.value)-margin)
 		.style("stroke","white")
 		.style("stroke-width","2px")
-		.style("fill",color[i]);
-
+		.style("fill","steelblue");
 	    svg.append("text")
-		.attr("x",margin+(i*3)*barWidth+barWidth/2)
-		.attr("y",yPos-20)
-		.attr("dy","0.3em")
-		.style("text-anchor","middle")
+		.attr("x",x(d.group)+x.rangeBand()-12)
+		.attr("y",y(d.value))
+		.attr("height",height - y(d.value)-margin)
+		.attr("dy","1.3em")
+		.attr("dx","0.6em")
 		.style("font-family","sans-serif")
-		.style("font-weight","bold")
-		.style("font-size","12px")
-		.style("fill",color[i])
-		.text(d.value+"%");
-
-
-	    svg.append("text")
-		.attr("x",margin+(i*3)*barWidth+barWidth/2)
-		.attr("y",height-textmargin)
-		.attr("dy","0.3em")
-		.style("text-anchor","middle")
-		.style("font-family","sans-serif")
-		.style("font-weight","bold")
-		.style("font-size","9px")
-		.style("fill","black")
-		.text(d.group);
+		.style("font-size","10px")
+		.style("fill", "white")
+		.style("stroke", "white")
+		.text(d.value);
+		svg.append("g")
+			.attr("class", "x axis")
+       		.attr("transform", "translate(15," + (height - margin) + ")")
+        	.call(xAxis)
+        	.selectAll("text")
+        		.style("text-anchor", "end")
+        		.attr("dx", "-.8em")
+        		.attr("dy", ".15em")
+        		.attr("transform", function(d){
+        			return "rotate(-45)"
+        		});
+        svg.append("g")
+        	.attr("class", "y axis")
+       		.attr("transform", "translate(15," + 0 + ")")
+        	.call(yAxis);
+       	svg.append("text")
+	       	.attr("transform", "rotate(-90)")
+	       	.attr("x",0 - (height / 2))
+	       	.attr("y", -margin)
+	        .attr("dy", "1em")
+	        .style("text-anchor", "middle")
+	        .text("% of Internet Users");
+       	svg.append("text")
+	       	.attr("x",(width/2))
+	       	.attr("y", -20)
+	        .attr("dx", "2em")
+	        .style("text-anchor", "middle")
+	        .text("Breakdown by " + d.category);
 	});
+	function type(d){
+		d.value = +d.value; //coerce to number
+		return d;
+	}
 
 }
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf
 */
 
-function graph2(category){
-	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+function findsubcat(category){
+	var dict = 
+		{"Total": {"all"}, 
+		"Gender": {"Men", "Women"},
+		"Race": {"White, Non-Hispanic", "Black, Non-Hispanic", "Hispanic"},
+		"Income": {"<30k", "30k-49k", "50k-74k", "75k+"},
+		"Residence": {"Urban", "Suburban", "Rural"},
+		"Age": {"18-29", "30-49", "50-64", "65+"},
+		"Education": {"High School or less", "Some College", "College+"}
+		};
+	// console.log(dict.category);
+	return dict.category;
+}
 
+function graph2(category){
 	var height = 200;
-	var width = 150;
+	var width = 400;
 
 	var svg = d3.select("body").select("div.categories").select("." + category);
 
@@ -177,18 +198,19 @@ function graph2(category){
     var chartHeight = height - 2*margin;
     var chartWidth = width - 2*margin;
     var textmargin = 10;
-    var bucketWidth = chartWidth/6;
 
-    // var color = ["red", "green", "blue", "violet"];
+    var subcategories = findsubcat(category);
+	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
 
 
-	social_sites.forEach(function(d,i){
-		var dataset = getDataRows(category,d);
-		var bucketWidth = chartWidth/6;
-		var x_start = i*bucketWidth+margin;
-		var barWidth = bucketWidth/(dataset.length);
+	subcategories.forEach(function(b,i){
+		social_sites.forEach(function(d,j){
+		var dataset = getDataRows2(b,d);
+		var bucketWidth = chartWidth/(dataset.length);
+		var barWidth = bucketWidth/6;
+		var x_start = margin + (i-1)*bucketWidth;
 
-		dataset.forEach(function(g,j){
+		dataset.forEach(function(g,k){
 			var barHeight = chartHeight*g.value/100;
 			var yPos = height-margin-barHeight;
 
@@ -201,33 +223,32 @@ function graph2(category){
 			.style("stroke-width","2px")
 			.style("fill","blue");
 
-			svg.append("text")
-			.attr("x",x_start+j*barWidth)
-			.attr("y",yPos-20)
-			.attr("dy","0.3em")
-			.style("text-anchor","middle")
-			.style("font-family","sans-serif")
-			.style("font-weight","bold")
-			.style("font-size","12px")
-			.style("fill","blue")
-			.text(g.value+"%");
+			// svg.append("text")
+			// .attr("x",x_start+j*barWidth)
+			// .attr("y",yPos-20)
+			// .attr("dy","0.3em")
+			// .style("text-anchor","middle")
+			// .style("font-family","sans-serif")
+			// .style("font-weight","bold")
+			// .style("font-size","12px")
+			// .style("fill","blue")
+			// .text(g.value+"%");
 
-			svg.append("text")
-			.attr("x",x_start+j*barWidth)
-			.attr("y",height-textmargin)
-			.attr("dy","0.3em")
-			.style("text-anchor","middle")
-			.style("font-family","sans-serif")
-			.style("font-weight","bold")
-			.style("font-size","9px")
-			.style("fill","black")
-			.text(g.media);
+			// svg.append("text")
+			// .attr("x",x_start+j*barWidth)
+			// .attr("y",height-textmargin)
+			// .attr("dy","0.3em")
+			// .style("text-anchor","middle")
+			// .style("font-family","sans-serif")
+			// .style("font-weight","bold")
+			// .style("font-size","9px")
+			// .style("fill","black")
+			// .text(g.media);
+			});
+		});
 
-		})
-	// return data;
-
-	})
-};
+	});
+}
 
 function getDataRows (category,media) {
     var data = [
@@ -361,6 +382,140 @@ function getDataRows (category,media) {
     
     return data.filter(function(row) {
 	return (row.category===category && row.media===media) ; });
+}
+
+function getDataRows2 (group,media) {
+    var data = [
+	{ category:"Total", group:"all", media:"Tumblr", value:10},
+	{ category:"Total", group:"all", media:"Facebook", value:72},
+	{ category:"Total", group:"all", media:"Pinterest", value:31},
+	{ category:"Total", group:"all", media:"Instagram", value:28},
+	{ category:"Total", group:"all", media:"LinkedIn", value:25},
+	{ category:"Total", group:"all", media:"Twitter", value:23},
+
+	{ category:"Gender", group:"Men", media:"Tumblr", value:10},
+	{ category:"Gender", group:"Women", media:"Tumblr", value:11},
+	{ category:"Gender", group:"Men", media:"Facebook", value:66},
+	{ category:"Gender", group:"Women", media:"Facebook", value:77},
+	{ category:"Gender", group:"Men", media:"Pinterest", value:16},
+	{ category:"Gender", group:"Women", media:"Pinterest", value:44},
+	{ category:"Gender", group:"Men", media:"Instagram", value:24},
+	{ category:"Gender", group:"Women", media:"Instagram", value:31},
+	{ category:"Gender", group:"Men", media:"LinkedIn", value:26},
+	{ category:"Gender", group:"Weomen", media:"LinkedIn", value:25},
+	{ category:"Gender", group:"Men", media:"Twitter", value:25},
+	{ category:"Gender", group:"Women", media:"Twitter", value:21},
+
+	{ category:"Race", group:"White, Non-Hispanic", media:"Tumblr", value:9},
+	{ category:"Race", group:"Black, Non-Hispanic", media:"Tumblr", value:15},
+	{ category:"Race", group:"Hispanic", media:"Tumblr", value:15},
+	{ category:"Race", group:"White, Non-Hispanic", media:"Facebook", value:70},
+	{ category:"Race", group:"Black, Non-Hispanic", media:"Facebook", value:67},
+	{ category:"Race", group:"Hispanic", media:"Facebook", value:75},
+	{ category:"Race", group:"White, Non-Hispanic", media:"Pinterest", value:32},
+	{ category:"Race", group:"Black, Non-Hispanic", media:"Pinterest", value:23},
+	{ category:"Race", group:"Hispanic", media:"Pinterest", value:32},
+	{ category:"Race", group:"White, Non-Hispanic", media:"Instagram", value:21},
+	{ category:"Race", group:"Black, Non-Hispanic", media:"Instagram", value:47},
+	{ category:"Race", group:"Hispanic", media:"Instagram", value:38},
+	{ category:"Race", group:"White, Non-Hispanic", media:"LinkedIn", value:26},
+	{ category:"Race", group:"Black, Non-Hispanic", media:"LinkedIn", value:22},
+	{ category:"Race", group:"Hispanic", media:"LinkedIn", value:22},
+	{ category:"Race", group:"White, Non-Hispanic", media:"Twitter", value:20},
+	{ category:"Race", group:"Black, Non-Hispanic", media:"Twitter", value:28},
+	{ category:"Race", group:"Hispanic", media:"Twitter", value:28},
+
+	{ category:"Age", group:"18-29", media:"Tumblr", value:20},
+	{ category:"Age", group:"30-49", media:"Tumblr", value:11},
+	{ category:"Age", group:"50-64", media:"Tumblr", value:5},
+	{ category:"Age", group:"65+", media:"Tumblr", value:2},
+	{ category:"Age", group:"18-29", media:"Facebook", value:82},
+	{ category:"Age", group:"30-49", media:"Facebook", value:79},
+	{ category:"Age", group:"50-64", media:"Facebook", value:64},
+	{ category:"Age", group:"65+", media:"Facebook", value:48},
+	{ category:"Age", group:"18-29", media:"Pinterest", value:37},
+	{ category:"Age", group:"30-49", media:"Pinterest", value:36},
+	{ category:"Age", group:"50-64", media:"Pinterest", value:24},
+	{ category:"Age", group:"65+", media:"Pinterest", value:16},
+	{ category:"Age", group:"18-29", media:"Instagram", value:55},
+	{ category:"Age", group:"30-49", media:"Instagram", value:28},
+	{ category:"Age", group:"50-64", media:"Instagram", value:11},
+	{ category:"Age", group:"65+", media:"Instagram", value:4},
+	{ category:"Age", group:"18-29", media:"LinkedIn", value:22},
+	{ category:"Age", group:"30-49", media:"LinkedIn", value:32},
+	{ category:"Age", group:"50-64", media:"LinkedIn", value:26},
+	{ category:"Age", group:"65+", media:"LinkedIn", value:12},
+	{ category:"Age", group:"18-29", media:"Twitter", value:32},
+	{ category:"Age", group:"30-49", media:"Twitter", value:29},
+	{ category:"Age", group:"50-64", media:"Twitter", value:13},
+	{ category:"Age", group:"65+", media:"Twitter", value:6},	
+
+	{ category:"Education", group:"High School or less", media:"Tumblr", value:10},
+	{ category:"Education", group:"Some College", media:"Tumblr", value:13},
+	{ category:"Education", group:"College+", media:"Tumblr", value:9},
+	{ category:"Education", group:"High School or less", media:"Facebook", value:71},
+	{ category:"Education", group:"Some College", media:"Facebook", value:72},
+	{ category:"Education", group:"College+", media:"Facebook", value:72},
+	{ category:"Education", group:"High School or less", media:"Pinterest", value:25},
+	{ category:"Education", group:"Some College", media:"Pinterest", value:37},
+	{ category:"Education", group:"College+", media:"Pinterest", value:31},
+	{ category:"Education", group:"High School or less", media:"Instagram", value:25},
+	{ category:"Education", group:"Some College", media:"Instagram", value:32},
+	{ category:"Education", group:"College+", media:"Instagram", value:26},
+	{ category:"Education", group:"High School or less", media:"LinkedIn", value:8},
+	{ category:"Education", group:"Some College", media:"LinkedIn", value:25},
+	{ category:"Education", group:"College+", media:"LinkedIn", value:46},
+	{ category:"Education", group:"High School or less", media:"Twitter", value:19},
+	{ category:"Education", group:"Some College", media:"Twitter", value:23},
+	{ category:"Education", group:"College+", media:"Twitter", value:27},
+
+	{ category:"Income", group:"<30k", media:"Tumblr", value:16},
+	{ category:"Income", group:"30k-49k", media:"Tumblr", value:8},
+	{ category:"Income", group:"50k-74k", media:"Tumblr", value:4},
+	{ category:"Income", group:"75k+", media:"Tumblr", value:11},	
+	{ category:"Income", group:"<30k", media:"Facebook", value:73},
+	{ category:"Income", group:"30k-49k", media:"Facebook", value:72},
+	{ category:"Income", group:"50k-74k", media:"Facebook", value:66},
+	{ category:"Income", group:"75k+", media:"Facebook", value:78},
+	{ category:"Income", group:"<30k", media:"Pinterest", value:24},
+	{ category:"Income", group:"30k-49k", media:"Pinterest", value:37},
+	{ category:"Income", group:"50k-74k", media:"Pinterest", value:41},
+	{ category:"Income", group:"75k+", media:"Pinterest", value:30},
+	{ category:"Income", group:"<30k", media:"Instagram", value:26},
+	{ category:"Income", group:"30k-49k", media:"Instagram", value:27},
+	{ category:"Income", group:"50k-74k", media:"Instagram", value:30},
+	{ category:"Income", group:"75k+", media:"Instagram", value:26},
+	{ category:"Income", group:"<30k", media:"LinkedIn", value:17},
+	{ category:"Income", group:"30k-49k", media:"LinkedIn", value:21},
+	{ category:"Income", group:"50k-74k", media:"LinkedIn", value:32},
+	{ category:"Income", group:"75k+", media:"LinkedIn", value:41},
+	{ category:"Income", group:"<30k", media:"Twitter", value:21},
+	{ category:"Income", group:"30k-49k", media:"Twitter", value:19},
+	{ category:"Income", group:"50k-74k", media:"Twitter", value:25},
+	{ category:"Income", group:"75k+", media:"Twitter", value:26},
+
+	{ category:"Residence", group:"Urban", media:"Tumblr", value:16},
+	{ category:"Residence", group:"Suburban", media:"Tumblr", value:8},
+	{ category:"Residence", group:"Rural", media:"Tumblr", value:3},	
+	{ category:"Residence", group:"Urban", media:"Facebook", value:74},
+	{ category:"Residence", group:"Suburban", media:"Facebook", value:72},
+	{ category:"Residence", group:"Rural", media:"Facebook", value:67},
+	{ category:"Residence", group:"Urban", media:"Pinterest", value:26},
+	{ category:"Residence", group:"Suburban", media:"Pinterest", value:34},
+	{ category:"Residence", group:"Rural", media:"Pinterest", value:31},
+	{ category:"Residence", group:"Urban", media:"Instagram", value:32},
+	{ category:"Residence", group:"Suburban", media:"Instagram", value:28},
+	{ category:"Residence", group:"Rural", media:"Instagram", value:18},
+	{ category:"Residence", group:"Urban", media:"LinkedIn", value:30},
+	{ category:"Residence", group:"Suburban", media:"LinkedIn", value:26},
+	{ category:"Residence", group:"Rural", media:"LinkedIn", value:12},
+	{ category:"Residence", group:"Urban", media:"Twitter", value:30},
+	{ category:"Residence", group:"Suburban", media:"Twitter", value:21},
+	{ category:"Residence", group:"Rural", media:"Twitter", value:15}];
+	
+    
+    return data.filter(function(row) {
+	return (row.group===group && row.media===media) ; });
 }
     </script>
     

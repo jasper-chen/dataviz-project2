@@ -108,7 +108,7 @@ function graph(media,category) {
 
     var y = d3.scale.linear()
     	.domain([0,100])
-		.range([height-margin,0]);
+		.range([height,0]);
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
@@ -124,40 +124,28 @@ function graph(media,category) {
 
 	    svg.append("rect")
 		.attr("x",x(d.group)+x.rangeBand()-12)
-		.attr("y",y(d.value)-margin)
+		.attr("y",y(d.value))
 		.attr("width",barWidth)
 		.attr("height", height - y(d.value))
 		.style("stroke","white")
 		.style("stroke-width","2px")
 		.style("fill","steelblue");
 
-	    /*svg.append("text")
-		.attr("x",chartWidth/(length + 1) + (i*3)*barWidth)
-		//.attr("x",margin+(i*3)*barWidth+barWidth/2)
-		.attr("y",yPos-20)
-		.attr("dy","0.3em")
-		.style("text-anchor","middle")
+	    svg.append("text")
+		.attr("x",x(d.group)+x.rangeBand()-12)
+		.attr("y",y(d.value))
+		.attr("height",height - y(d.value))
+		.attr("dy","1.3em")
+		.attr("dx","0.6em")
 		.style("font-family","sans-serif")
-		.style("font-weight","bold")
-		.style("font-size","12px")
-		.style("fill","steelblue")
-		.text(d.value+"%");*/
-
-	    /*svg.append("text")
-		.attr("x",chartWidth/(length + 1) + (i*3)*barWidth)
-		//.attr("x",margin+(i*3)*barWidth+barWidth/2)
-		.attr("y",height-textmargin)
-		.attr("dy","0.3em")
-		.style("text-anchor","middle")
-		.style("font-family","sans-serif")
-		.style("font-weight","bold")
-		.style("font-size","9px")
-		.style("fill","black")
-		.text(d.group);*/
+		.style("font-size","10px")
+		.style("fill", "white")
+		.style("stroke", "white")
+		.text(d.value);
 
 		svg.append("g")
 			.attr("class", "x axis")
-       		.attr("transform", "translate(15," + (height - margin) + ")")
+       		.attr("transform", "translate(15," + height + ")")
         	.call(xAxis)
         	.selectAll("text")
         		.style("text-anchor", "end")
@@ -166,7 +154,6 @@ function graph(media,category) {
         		.attr("transform", function(d){
         			return "rotate(-45)"
         		});
-
 
         svg.append("g")
         	.attr("class", "y axis")
@@ -188,14 +175,6 @@ function graph(media,category) {
 	        .style("text-anchor", "middle")
 	        .text("Breakdown by " + d.category);	        
 
-		//title
-
-/*		svg.append("text")
-		.attr("x", chartWidth/2)
-		.attr("y",2*textmargin)
-		.text(
-			'Total Categories');
-*/
 	});
 
 	function type(d) {

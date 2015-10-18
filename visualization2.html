@@ -24,7 +24,7 @@ window.addEventListener("load",run);
 function run () {
 	//create several graphs
 	
-	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+	var social_sites = ['Tumblr','Twitter','LinkedIn','Instagram','Pinterest','Facebook'];
 	var categories = ['Total','Gender','Race','Income','Residence','Age','Education'];
 	//make 25 graphs
 	//5 for each website, then 6 for each category
@@ -210,7 +210,7 @@ function graph2(category){
 	var xAxis = d3.svg.axis()
 		.scale(x)
 		.orient("bottom");
-	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
+	var social_sites = ['Tumblr','Twitter','LinkedIn','Instagram','Pinterest','Facebook'];
 
 
 	subcategories.forEach(function(b,i){
@@ -229,7 +229,7 @@ function graph2(category){
 
 		var bucketWidth = chartWidth/(subcategories.length);
 		var barWidth = bucketWidth/6;
-		var x_start = margin + i*bucketWidth;
+		var x_start = margin - 10 + i*bucketWidth;
 		var colors = ["#cb2027", "#125688", "#006699", "#00aced", "#32506d", "#3b5998"];
 		var brandImg = ["http://www.oklahomashakespeare.com/sites/osp/uploads/images/BUTTONS/Pinterest_Logo.jpg", "http://www.cliparthut.com/clip-arts/1212/instagram-logo-transparent-1212020.png", "http://www2.psd100.com/ppp/2013/11/0601/linkedin-logo-icon-1106010657.png", "http://www.mycustomer.com/sites/default/files/Twitter_New%20size.png", "https://secure.assets.tumblr.com/images/logo_page/img_logo_bluebg_2x.png", "http://aquapur.rs/images/fb-logo.png"];
 
@@ -244,29 +244,36 @@ function graph2(category){
 			.attr("height",barHeight)
 			.style("stroke","white")
 			.style("stroke-width","2px")
-			.style("fill","steelblue");
+			.style("fill",colors[j]);
+
+			svg.append("svg:image")
+				.attr("xlink:href", brandImg[j])
+				.attr("width", barWidth)
+				.attr("height", barWidth/2.5)
+				.attr("x", x_start+j*barWidth)
+				.attr("y", height-margin);
 
 			svg.append("text")
 			.attr("x",x_start+j*barWidth)
 			.attr("y",yPos)
-			.attr("dx","0.6em")
+			.attr("dx","0.8em")
 			.attr("dy", "1em")
 			.style("text-anchor","middle")
 			.style("font-family","sans-serif")
-			.style("font-size","12px")
-			.style("fill","black")
+			.style("font-size","10px")
+			.style("fill","white")
 			.text(g.value);
 
 			svg.append("g")
 			.attr("class", "x axis")
-       		.attr("transform", "translate(15," + (height - margin) + ")")
+       		.attr("transform", "translate(15," + (height) + ")")
         	.call(xAxis)
         	.selectAll("text")
         		.style("text-anchor", "end")
         		.attr("dx", "-.8em")
         		.attr("dy", ".15em")
         		.attr("transform", function(d){
-        			return "rotate(-45)"
+        			return "rotate(-15)"
         		});
 
 	        svg.append("g")
@@ -287,18 +294,22 @@ function graph2(category){
 		       	.attr("y", -20)
 		        .attr("dx", "2em")
 		        .style("text-anchor", "middle")
-		        //.text("Breakdown by " + b);
 				});
-			if (j!==(subcategories.length-1)){
-				svg.append("line")
-	              .attr("x1", x_start+barWidth*6)
-	              .attr("y1", height-margin)
-	              .attr("x2", x_start+barWidth*6)
-	              .attr("y2", 0)
-	              .attr("stroke-width", 1)
-	              .attr("stroke", "black");
-	    	}
+		
+			svg.append("line")
+              .attr("x1", x_start+barWidth*6)
+              .attr("y1", height-margin)
+              .attr("x2", x_start+barWidth*6)
+              .attr("y2", 0)
+              .attr("stroke-width", 1)
+              .attr("stroke", "black");
 
+            svg.append("text")
+		       	.attr("x",(width/2))
+		       	.attr("y", -20)
+		        .attr("dx", "2em")
+		        .style("text-anchor", "middle")
+		        .text("Breakdown by " + category + " Across Social Media Sites");	
 		});
 	});
 }
@@ -454,7 +465,7 @@ function getDataRows2 (group,media) {
 	{ category:"Gender", group:"Men", media:"Instagram", value:24},
 	{ category:"Gender", group:"Women", media:"Instagram", value:31},
 	{ category:"Gender", group:"Men", media:"LinkedIn", value:26},
-	{ category:"Gender", group:"Weomen", media:"LinkedIn", value:25},
+	{ category:"Gender", group:"Women", media:"LinkedIn", value:25},
 	{ category:"Gender", group:"Men", media:"Twitter", value:25},
 	{ category:"Gender", group:"Women", media:"Twitter", value:21},
 

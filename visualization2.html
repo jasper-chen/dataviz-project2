@@ -8,6 +8,7 @@
     <!-- load D3 library -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="./mystyle.css">
 
   </head>
   
@@ -76,7 +77,7 @@ function run () {
 		// 	// graph2(d);
 		// });
 
-};
+}
 
 
 
@@ -172,15 +173,15 @@ var textmargin = 10;
 
 function findsubcat(category){
 	var dict = 
-		{"Total": {"all"}, 
-		"Gender": {"Men", "Women"},
-		"Race": {"White, Non-Hispanic", "Black, Non-Hispanic", "Hispanic"},
-		"Income": {"<30k", "30k-49k", "50k-74k", "75k+"},
-		"Residence": {"Urban", "Suburban", "Rural"},
-		"Age": {"18-29", "30-49", "50-64", "65+"},
-		"Education": {"High School or less", "Some College", "College+"}
+		{"Total": "all", 
+		"Gender": ["Men", "Women"],
+		"Race": ["White, Non-Hispanic", "Black, Non-Hispanic", "Hispanic"],
+		"Income": ["<30k", "30k-49k", "50k-74k", "75k+"],
+		"Residence": ["Urban", "Suburban", "Rural"],
+		"Age": ["18-29", "30-49", "50-64", "65+"],
+		"Education": ["High School or less", "Some College", "College+"]
 		};
-	// console.log(dict.category);
+	console.log(dict.category);
 	return dict.category;
 }
 

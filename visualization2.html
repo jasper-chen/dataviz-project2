@@ -68,13 +68,11 @@ function run () {
     	.selectAll("svg")
     	.append("h2")
     	.text(function(d){
-    		findsubcat(d);
-    	});
-  // 		.each(function(d){
-  // 			return d;
-  // 			// findsubcat(d);
-		// 	// graph2(d);
-		// });
+    		return d;
+    	})
+  		.each(function(d){
+			graph2(d);
+		});
 
 };
 
@@ -172,16 +170,16 @@ var textmargin = 10;
 
 function findsubcat(category){
 	var dict = 
-		{"Total": {"all"}, 
-		"Gender": {"Men", "Women"},
-		"Race": {"White, Non-Hispanic", "Black, Non-Hispanic", "Hispanic"},
-		"Income": {"<30k", "30k-49k", "50k-74k", "75k+"},
-		"Residence": {"Urban", "Suburban", "Rural"},
-		"Age": {"18-29", "30-49", "50-64", "65+"},
-		"Education": {"High School or less", "Some College", "College+"}
+		{"Total": ["all"], 
+		"Gender": ["Men", "Women"],
+		"Race": ["White, Non-Hispanic", "Black, Non-Hispanic", "Hispanic"],
+		"Income": ["<30k", "30k-49k", "50k-74k", "75k+"],
+		"Residence": ["Urban", "Suburban", "Rural"],
+		"Age": ["18-29", "30-49", "50-64", "65+"],
+		"Education": ["High School or less", "Some College", "College+"]
 		};
 	// console.log(dict.category);
-	return dict.category;
+	return dict[category];
 }
 
 function graph2(category){
@@ -206,9 +204,9 @@ function graph2(category){
 	subcategories.forEach(function(b,i){
 		social_sites.forEach(function(d,j){
 		var dataset = getDataRows2(b,d);
-		var bucketWidth = chartWidth/(dataset.length);
+		var bucketWidth = chartWidth/(subcategories.length);
 		var barWidth = bucketWidth/6;
-		var x_start = margin + (i-1)*bucketWidth;
+		var x_start = margin + i*bucketWidth;
 
 		dataset.forEach(function(g,k){
 			var barHeight = chartHeight*g.value/100;
@@ -223,19 +221,19 @@ function graph2(category){
 			.style("stroke-width","2px")
 			.style("fill","blue");
 
-			// svg.append("text")
-			// .attr("x",x_start+j*barWidth)
-			// .attr("y",yPos-20)
-			// .attr("dy","0.3em")
-			// .style("text-anchor","middle")
-			// .style("font-family","sans-serif")
-			// .style("font-weight","bold")
-			// .style("font-size","12px")
-			// .style("fill","blue")
-			// .text(g.value+"%");
+			svg.append("text")
+			.attr("x",x_start+j*barWidth+textmargin)
+			.attr("y",yPos-20)
+			.attr("dy","0.3em")
+			.style("text-anchor","middle")
+			.style("font-family","sans-serif")
+			.style("font-weight","bold")
+			.style("font-size","12px")
+			.style("fill","blue")
+			.text(g.value+"%");
 
 			// svg.append("text")
-			// .attr("x",x_start+j*barWidth)
+			// .attr("x",x_start+j*barWidth/2)
 			// .attr("y",height-textmargin)
 			// .attr("dy","0.3em")
 			// .style("text-anchor","middle")

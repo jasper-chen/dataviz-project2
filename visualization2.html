@@ -229,7 +229,9 @@ function graph2(category){
 
 		var bucketWidth = chartWidth/(subcategories.length);
 		var barWidth = bucketWidth/6;
-		var x_start = 15 + i*bucketWidth;
+		var x_start = margin + i*bucketWidth;
+		var colors = ["#cb2027", "#125688", "#006699", "#00aced", "#32506d", "#3b5998"];
+		var brandImg = ["http://www.oklahomashakespeare.com/sites/osp/uploads/images/BUTTONS/Pinterest_Logo.jpg", "http://www.cliparthut.com/clip-arts/1212/instagram-logo-transparent-1212020.png", "http://www2.psd100.com/ppp/2013/11/0601/linkedin-logo-icon-1106010657.png", "http://www.mycustomer.com/sites/default/files/Twitter_New%20size.png", "https://secure.assets.tumblr.com/images/logo_page/img_logo_bluebg_2x.png", "http://aquapur.rs/images/fb-logo.png"];
 
 		dataset.forEach(function(g,k){
 			var barHeight = chartHeight*g.value/100;
@@ -296,6 +298,7 @@ function graph2(category){
 	              .attr("stroke-width", 1)
 	              .attr("stroke", "black");
 	    	}
+
 		});
 	});
 }

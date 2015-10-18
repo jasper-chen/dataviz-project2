@@ -72,20 +72,11 @@ function run () {
   		.each(function(d){
 			graph2(d);
 		});
-<<<<<<< HEAD
-
-}
-
-
-=======
 };
->>>>>>> jasper-dev
 
 function graph(media,category) {
 	var dataset = getDataRows(category,media);
 	//create a graph
-<<<<<<< HEAD
-
 	var length = dataset.length;
 	var height = 200;
 	var width = dataset.length*30;
@@ -107,61 +98,14 @@ function graph(media,category) {
 	var xAxis = d3.svg.axis()
 		.scale(x)
 		.orient("bottom")
-=======
-	var length = dataset.length;
 
-	var height = 200;
-	var width = dataset.length*30;
-
-	var margin = 25;
- //   var chartHeight = height - 2*margin;
- //   var chartWidth = width - 2*margin;
-	var svg = d3.select("." + media).select("." + category)
-		.attr("width", width)
-    	.attr("height", height);
-
-   /* var bordercolor='black';
-    var border = 1;
-
-    var borderPath = svg.append("rect")
-      .attr("x", 0)
-	  .attr("y", 0)
-	  .attr("height", height)
-	  .attr("width", width)
-	  .style("stroke", bordercolor)
-	  .style("fill", "none")
-	  .style("stroke-width", border);*/
-
-    var barWidth = 25;
-
-    groups = dataset.map(function(x){ return x.group });
-
-    var x = d3.scale.ordinal()
-		.domain(groups)
-		.rangeBands([0,width]);
-
-    var y = d3.scale.linear()
-    	.domain([0,100])
-		.range([height-margin,0]);
-
-	var xAxis = d3.svg.axis()
-		.scale(x)
-		.orient("bottom")
-
->>>>>>> jasper-dev
 	var yAxis = d3.svg.axis()
 		.scale(y)
 		.orient("left");
 
     dataset.forEach(function(d,i) {
-<<<<<<< HEAD
-    	// console.log(dataset + i);
-var textmargin = 10;
-=======
-
     	var textmargin = 10;
 
->>>>>>> jasper-dev
 	    svg.append("rect")
 		.attr("x",x(d.group)+x.rangeBand()-12)
 		.attr("y",y(d.value))
@@ -170,10 +114,7 @@ var textmargin = 10;
 		.style("stroke","white")
 		.style("stroke-width","2px")
 		.style("fill","steelblue");
-<<<<<<< HEAD
-=======
 
->>>>>>> jasper-dev
 	    svg.append("text")
 		.attr("x",x(d.group)+x.rangeBand()-12)
 		.attr("y",y(d.value))
@@ -185,10 +126,7 @@ var textmargin = 10;
 		.style("fill", "white")
 		.style("stroke", "white")
 		.text(d.value);
-<<<<<<< HEAD
-=======
 
->>>>>>> jasper-dev
 		svg.append("g")
 			.attr("class", "x axis")
        		.attr("transform", "translate(15," + (height - margin) + ")")
@@ -200,18 +138,12 @@ var textmargin = 10;
         		.attr("transform", function(d){
         			return "rotate(-45)"
         		});
-<<<<<<< HEAD
-=======
 
->>>>>>> jasper-dev
         svg.append("g")
         	.attr("class", "y axis")
        		.attr("transform", "translate(15," + 0 + ")")
         	.call(yAxis);
-<<<<<<< HEAD
-=======
 
->>>>>>> jasper-dev
        	svg.append("text")
 	       	.attr("transform", "rotate(-90)")
 	       	.attr("x",0 - (height / 2))
@@ -219,30 +151,18 @@ var textmargin = 10;
 	        .attr("dy", "1em")
 	        .style("text-anchor", "middle")
 	        .text("% of Internet Users");
-<<<<<<< HEAD
-=======
 
->>>>>>> jasper-dev
        	svg.append("text")
 	       	.attr("x",(width/2))
 	       	.attr("y", -20)
 	        .attr("dx", "2em")
 	        .style("text-anchor", "middle")
-<<<<<<< HEAD
-	        .text("Breakdown by " + d.category);
-=======
 	        .text("Breakdown by " + d.category);	        
-
->>>>>>> jasper-dev
 	});
+
 	function type(d){
 		d.value = +d.value; //coerce to number
 		return d;
-	}
-
-	function type(d) {
-	  d.value = +d.value; // coerce to number
-	  return d;
 	}
 
 
@@ -267,13 +187,9 @@ function findsubcat(category){
 
 function graph2(category){
 	var height = 200;
-<<<<<<< HEAD
 	var width = 400;
 
     var margin = 25;
-=======
-	var width = 250;
->>>>>>> jasper-dev
 
 	var svg = d3.select("body").select("div.categories").select("." + category);
 
@@ -284,9 +200,16 @@ function graph2(category){
 
     var chartHeight = height - 2*margin;
     var chartWidth = width - 2*margin;
-    var textmargin = 10;
 
     var subcategories = findsubcat(category);
+
+    var x = d3.scale.ordinal()
+		.domain(subcategories)
+		.rangeBands([0,width-2*margin]);
+			
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
 	var social_sites = ['Pinterest','Instagram','LinkedIn','Twitter','Tumblr','Facebook'];
 
 
@@ -295,14 +218,6 @@ function graph2(category){
 		var dataset = getDataRows2(b,d);
 
 		group = dataset.map(function(x) {return x.group});
-
-		var x = d3.scale.ordinal()
-			.domain(group)
-			.rangeBands([0,width]);
-			
-		var xAxis = d3.svg.axis()
-			.scale(x)
-			.orient("bottom");
 
 		var y = d3.scale.linear()
 	    	.domain([0,100])
@@ -314,7 +229,7 @@ function graph2(category){
 
 		var bucketWidth = chartWidth/(subcategories.length);
 		var barWidth = bucketWidth/6;
-		var x_start = margin + i*bucketWidth;
+		var x_start = 15 + i*bucketWidth;
 
 		dataset.forEach(function(g,k){
 			var barHeight = chartHeight*g.value/100;
@@ -327,20 +242,19 @@ function graph2(category){
 			.attr("height",barHeight)
 			.style("stroke","white")
 			.style("stroke-width","2px")
-			.style("fill","blue");
+			.style("fill","steelblue");
 
 			svg.append("text")
-			.attr("x",x_start+j*barWidth+textmargin)
-			.attr("y",yPos-20)
-			.attr("dy","0.3em")
+			.attr("x",x_start+j*barWidth)
+			.attr("y",yPos)
+			.attr("dx","0.6em")
+			.attr("dy", "1em")
 			.style("text-anchor","middle")
 			.style("font-family","sans-serif")
-			.style("font-weight","bold")
 			.style("font-size","12px")
-			.style("fill","blue")
-			.text(g.value+"%");
+			.style("fill","black")
+			.text(g.value);
 
-<<<<<<< HEAD
 			svg.append("g")
 			.attr("class", "x axis")
        		.attr("transform", "translate(15," + (height - margin) + ")")
@@ -373,25 +287,19 @@ function graph2(category){
 		        .style("text-anchor", "middle")
 		        //.text("Breakdown by " + b);
 				});
+			if (j!==(subcategories.length-1)){
+				svg.append("line")
+	              .attr("x1", x_start+barWidth*6)
+	              .attr("y1", height-margin)
+	              .attr("x2", x_start+barWidth*6)
+	              .attr("y2", 0)
+	              .attr("stroke-width", 1)
+	              .attr("stroke", "black");
+	    	}
 		});
 	});
 }
-=======
-			svg.append("text")
-			.attr("x",x_start+j*barWidth)
-			.attr("y",height-textmargin)
-			.attr("dy","0.3em")
-			.style("text-anchor","middle")
-			.style("font-family","sans-serif")
-			.style("font-weight","bold")
-			.style("font-size","9px")
-			.style("fill","black")
-			.text(g.media);
 
-		})
-	})
-};
->>>>>>> jasper-dev
 
 /* From 
    http://www.pewinternet.org/files/2015/01/PI_SocialMediaUpdate20144.pdf
